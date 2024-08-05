@@ -2,7 +2,8 @@
 
 package com.example.deviceconfigurator;
 
-import com.example.deviceconfigurator.DeviceConfigurator;
+
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -42,30 +43,53 @@ public class DeviceConfigurator extends Application {
         TextField passInput = new TextField();
         GridPane.setConstraints(passInput, 1, 2);
 
+        // Port
+        Label portLabel = new Label("Port:");
+        GridPane.setConstraints(portLabel, 0, 3);
+        TextField portInput = new TextField();
+        GridPane.setConstraints(portInput, 1, 3);
+
+        // Baud Rate
+        Label baudRateLabel = new Label("Baud Rate:");
+        GridPane.setConstraints(baudRateLabel, 0, 4);
+        TextField baudRateInput = new TextField();
+        GridPane.setConstraints(baudRateInput, 1, 4);
+
+        // Protocol
+        Label protocolLabel = new Label("Protocol:");
+        GridPane.setConstraints(protocolLabel, 0, 5);
+        TextField protocolInput = new TextField();
+        GridPane.setConstraints(protocolInput, 1, 5);
+
         // Connect Button
         Button connectButton = new Button("Connect and Configure");
-        GridPane.setConstraints(connectButton, 1, 3);
+        GridPane.setConstraints(connectButton, 1, 6);
 
         connectButton.setOnAction(e -> {
             String ip = ipInput.getText();
             String user = userInput.getText();
             String pass = passInput.getText();
-            configureDevice(ip, user, pass);
+            String port = portInput.getText();
+            String baudRate = baudRateInput.getText();
+            String protocol = protocolInput.getText();
+            configureDevice(ip, user, pass, port, baudRate, protocol);
         });
 
-        grid.getChildren().addAll(ipLabel, ipInput, userLabel, userInput, passLabel, passInput, connectButton);
+        grid.getChildren().addAll(ipLabel, ipInput, userLabel, userInput, passLabel, passInput, portLabel, portInput, baudRateLabel, baudRateInput, protocolLabel, protocolInput, connectButton);
 
-        Scene scene = new Scene(grid, 300, 200);
+        Scene scene = new Scene(grid, 400, 300);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    private void configureDevice(String ip, String user, String pass) {
+    private void configureDevice(String ip, String user, String pass, String port, String baudRate, String protocol) {
         HelloController.SerialCommunicator communicator = new HelloController.SerialCommunicator();
-        if (communicator.connect("COM3")) { // Cambia "COM3" por el puerto correcto
+        if (communicator.connect(port)) { // Usar el puerto especificado
             communicator.sendCommand("SET IP " + ip);
             communicator.sendCommand("SET USER " + user);
             communicator.sendCommand("SET PASS " + pass);
+            communicator.sendCommand("SET BAUDRATE " + baudRate);
+            communicator.sendCommand("SET PROTOCOL " + protocol);
             communicator.disconnect();
             System.out.println("Device configured successfully.");
         } else {
