@@ -13,6 +13,7 @@ public class HelloApplication extends Application {
         primaryStage.setTitle("Aplicación Simple con JavaFX");
 
         Button btn = new Button();
+
         btn.setText("Haz clic aquí");
         btn.setOnAction(event -> System.out.println("¡Botón clicado!"));
 
