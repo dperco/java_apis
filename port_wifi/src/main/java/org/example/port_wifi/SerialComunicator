@@ -1,0 +1,24 @@
+import com.fazecast.jSerialComm.*;
+
+public class SerialCommunicator {
+    private SerialPort comPort;
+
+    public boolean connect(String port) {
+        comPort = SerialPort.getCommPort(port);
+        comPort.setBaudRate(9600);  // Ajusta esto al baud rate correcto para tu dispositivo
+        return comPort.openPort();
+    }
+
+    public void disconnect() {
+        if (comPort != null && comPort.isOpen()) {
+            comPort.closePort();
+        }
+    }
+
+    public void sendCommand(String command) {
+        if (comPort != null && comPort.isOpen()) {
+            byte[] commandBytes = command.getBytes();
+            comPort.writeBytes(commandBytes, commandBytes.length);
+        }
+    }
+}
